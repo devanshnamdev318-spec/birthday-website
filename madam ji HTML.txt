@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Moment for You | 2026 Digital Greeting</title>
+    <!-- Modern Typography: Inter for UI, Playfair Display for Emotion -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-deep: #050505;
+            --glass: rgba(20, 20, 20, 0.7);
+            --accent-primary: #ff3366; /* Electric Rose */
+            --accent-secondary: #7000ff; /* Cyber Violet */
+            --text-main: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.6);
+            --transition-smooth: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Custom 2026 fluid cursor */
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- Custom Interactive Cursor --- */
+        #cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: screen;
+            transition: transform 0.1s ease;
+            filter: blur(2px);
+            box-shadow: 0 0 20px var(--accent-primary);
+        }
+
+        /* --- Immersive Background --- */
+        #canvas-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            filter: blur(40px);
+            opacity: 0.5;
+        }
+
+        /* --- Layout & Journey --- */
+        .journey-container {
+            width: 100%;
+        }
+
+        section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: var(--transition-smooth);
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            padding: 4rem;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        /* --- Typography Styles --- */
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 10vw, 5rem);
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #fff, var(--accent-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sub-text {
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+
+        p {
+            font-size: 1.4rem;
+            font-weight: 300;
+        }
+
+        /* --- Interactive Elements --- */
+        .btn-interact {
+            background: transparent;
+            border: 1px solid var(--accent-primary);
+            color: var(--text-main);
+            padding: 1rem 2.5rem;
+            border-radius: 100px;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            margin-top: 2rem;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-interact:hover {
+            background: var(--accent-primary);
+            box-shadow: 0 0 40px var(--accent-primary);
+            transform: scale(1.05);
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translate(-50%, 0);}
+            40% {transform: translate(-50%, -10px);}
+            60% {transform: translate(-50%, -5px);}
+        }
+
+        /* --- Special 3D Heart Effect --- */
+        .heart-box {
+            position: relative;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .floating-heart {
+            font-size: 5rem;
+            filter: drop-shadow(0 0 20px var(--accent-primary));
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 600px) {
+            .glass-card { padding: 2rem; }
+            h1 { font-size: 2.5rem; }
+            p { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cursor"></div>
+    <canvas id="canvas-bg"></canvas>
+
+    <div class="journey-container">
+        <!-- STEP 1: Intro -->
+        <section id="intro" class="visible">
+            <div class="glass-card">
+                <div class="sub-text">A 2026 Narrative</div>
+                <h1>Happy Birthday, [Name]</h1>
+                <p>Today is more than a date on a calendar. It's the anniversary of the world becoming a little brighter.</p>
+                <button class="btn-interact" onclick="scrollToNext('spark')">Begin the Journey</button>
+            </div>
+        </section>
+
+        <!-- STEP 2: The Spark -->
+        <section id="spark">
+            <div class="glass-card">
+                <div class="sub-text">The Spark</div>
+                <div class="heart-box">
+                    <div class="floating-heart">❤️</div>
+                </div>
+                <p>Every moment spent with you feels like a page from a story I never want to end. You have this way of making the ordinary feel extraordinary.</p>
+            </div>
+        </section>
+
+        <!-- STEP 3: The Connection -->
+        <section id="connection">
+            <div class="glass-card">
+                <div class="sub-text">Infinite Loops</div>
+                <p>"In a universe of billions, my favorite place is wherever you are."</p>
+                <div style="margin-top: 2rem; font-style: italic; color: var(--accent-primary);">— A wish for you</div>
+            </div>
+        </section>
+
+        <!-- STEP 4: The Wish -->
+        <section id="wish">
+            <div class="glass-card" style="border: 1px solid var(--accent-secondary);">
+                <div class="sub-text">2026 & Beyond</div>
+                <h1>You Deserve the World</h1>
+                <p>May your year be filled with the kind of laughter that hurts your stomach, dreams that feel within reach, and the knowledge that you are deeply, truly cherished.</p>
+                <button class="btn-interact" onclick="celebrate()">Make a Wish</button>
+            </div>
+        </section>
+    </div>
+
+    <div class="scroll-indicator">↓ Scroll to Feel ↓</div>
+
+    <!-- JS: Particles & Interaction Engine -->
+    <script>
+        // 1. Custom Cursor Follow
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // 2. 2026 Ambient Background (Canvas)
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 100 + 50;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.color = Math.random() > 0.5 ? '#ff3366' : '#7000ff';
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y > canvas.height) this.y = 0;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 15; i++) particles.push(new Particle());
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // 3. Scroll Reveal Logic
+        const sections = document.querySelectorAll('section');
+        const observerOptions = { threshold: 0.5 };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => observer.observe(section));
+
+        // 4. Navigation Helpers
+        function scrollToNext(id) {
+            document.getElementById('spark').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 5. Final Celebration Trigger
+        function celebrate() {
+            // Visual feedback for the "Wish"
+            document.querySelector('#wish h1').innerText = "Wish Sent to the Stars";
+            document.querySelector('#wish p').innerText = "Check your heart, the celebration has begun.";
+            
+            // Intensify background
+            particles.forEach(p => {
+                p.speedX *= 10;
+                p.speedY *= 10;
+            });
+
+            // Browser Alert as a 2026 Haptic simulation
+            setTimeout(() => {
+                alert("Happy Birthday! You are amazing. ❤️");
+            }, 500);
+        }
+    </script>
+</body>
+</html>
